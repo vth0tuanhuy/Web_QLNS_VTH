@@ -1,0 +1,217 @@
+﻿@model IEnumerable<Web_QLNS_VTH.Models.ChucVu>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex">
+    @*@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })*@
+    <button type="button" class="btn btn-outline-primary col-1 fw-bold" data-bs-toggle="modal" data-bs-target="#myModal">
+        <i class="fa fa-plus me-2"></i> Thêm
+    </button>
+    <h3 class="text-center col-11 text-uppercase fw-bolder">Danh sách chức vụ</h3>
+</div>
+
+@{
+    List<Web_QLNS_VTH.Models.PhongBan> list = new List<Web_QLNS_VTH.Models.PhongBan>();
+    foreach (var i in ViewBag.PBan)
+    {
+        list.Add(i);
+    }
+}
+<div class="row mt-1">
+    @foreach (var item in ViewBag.PBan)
+    {
+
+        <div class="col-lg-6 col-md-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header">
+                    <span class="text-xs font-weight-bold text-primary mb-1">
+                        @item.maPhongBan.ToString()
+                    </span>
+                    <p class="h5 mb-0 font-weight-bold text-uppercase text-gray-800">Phòng @item.tenPhongBan.ToString()</p>
+                </div>
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <table class="table">
+                            <tr class="bg-primary text-white">
+                                <th class="col-3">
+                                    Mã chức vụ
+                                </th>
+                                <th class="col-6">
+                                    @Html.DisplayNameFor(model => model.tenChucVu)
+                                </th>
+                                <th class="col-3"></th>
+                            </tr>
+                            @foreach (var item1 in Model)
+                            {
+                                if (item1.maPhongBan == item.maPhongBan)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item1.maChucVu
+                                        </td>
+                                        <td>
+                                            @item1.tenChucVu
+                                        </td>
+                                        <td class="d-flex">
+                                            <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#myModal1-@item1.maChucVu">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                                </svg>
+                                            </button>
+                                            @using (Html.BeginForm("Edit", "ChucVus", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <div class="modal" id="myModal1-@item1.maChucVu">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-info">
+                                                                <h5 class="modal-title" id="confirmModalLabel">Thông tin chức vụ</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <!-- Modal body -->
+                                                            <div class="modal-body">
+
+                                                                <div class="form-group">
+                                                                    <label>Mã chức vụ</label>
+                                                                    <div class="col-md-10">
+                                                                        <input id="maChucVu" name="maChucVu" class="form-control" value="@item1.maChucVu" readonly />
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    @*@Html.LabelFor(model => model.tenChucVu, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                                                                    <label>Tên chức vụ</label>
+                                                                    <div class="col-md-10">
+                                                                        <input id="tenChucVu" name="tenChucVu" class="form-control" value="@item1.tenChucVu" />
+
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    @*@Html.LabelFor(model => model.maPhongBan, "maPhongBan", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                                                                    <label>Phòng ban</label>
+                                                                    <div class="col-md-10">
+                                                                        @*@Html.DropDownList("maPhongBan", ViewBag.maPhongBan as SelectList,"1", new { @class = "form-control" })*@
+                                                                        @*@Html.ValidationMessageFor(model => model.maPhongBan, "", new { @class = "text-danger" })*@
+                                                                        <select name="maPhongBan" id="tenPhongBan" class="form-control">
+                                                                            <option value="@item1.maPhongBan">@item1.PhongBan.tenPhongBan</option>
+                                                                            @foreach (var i in list)
+                                                                            {
+                                                                                if (i.maPhongBan != item1.maPhongBan)
+                                                                                {
+                                                                                    <option value="@i.maPhongBan">@i.tenPhongBan</option>
+                                                                                }
+                                                                            }
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+
+
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                                    <i class="fas fa-times me-2"></i>Thoát
+                                                                </button>
+                                                                <button class="btn btn-primary" type="submit">
+                                                                    <i class="fas fa-pencil-square me-2"></i>Sửa
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            <button class="btn btn-outline-danger" type="button" data-bs-toggle="modal" data-bs-target="#confirmModal-@item1.maChucVu">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
+                                                </svg>
+                                            </button>
+                                            <div class="modal fade" id="confirmModal-@item1.maChucVu" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-danger">
+                                                            <h5 class="modal-title" id="confirmModalLabel">Xác nhận xóa</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body text-center">
+                                                            <i class="fas fa-exclamation-triangle warning-icon"></i>
+                                                            <p class="mb-0">
+                                                                Bạn có chắc chắn muốn xóa chức vụ @item1.maChucVu không?
+                                                            </p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                                <i class="fas fa-times me-2"></i>Thoát
+                                                            </button>
+                                                            <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteConfirmed", "ChucVus",new {id = item1.maChucVu})'">
+                                                                <i class="fas fa-trash-alt me-2"></i>Xóa
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<!-- The Modal -->
+@using (Html.BeginForm("Create", "ChucVus", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal" id="myModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title" id="confirmModalLabel">Thêm chức vụ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @*<div class="form-group">
+                            <label>Mã chức vụ</label>
+                            <div class="col-md-10">
+                                <input id="maChucVu" name="maChucVu" class="form-control" />
+                            </div>
+                        </div>*@
+
+                    <div class="form-group">
+                        @*@Html.LabelFor(model => model.tenChucVu, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                        <label>Tên chức vụ</label>
+                        <div class="col-md-10">
+                            <input id="tenChucVu" name="tenChucVu" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @*@Html.LabelFor(model => model.maPhongBan, "maPhongBan", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                        <label>Phòng ban</label>
+                        <div class="col-md-10">
+                            @Html.DropDownList("maPhongBan", null, htmlAttributes: new { @class = "form-control" })
+                            @*@Html.ValidationMessageFor(model => model.maPhongBan, "", new { @class = "text-danger" })*@
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Thoát
+                    </button>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-plus me-2"></i>Thêm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

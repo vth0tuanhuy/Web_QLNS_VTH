@@ -1,0 +1,107 @@
+﻿@*@model IEnumerable<Web_QLNS_VTH.Models.NhanVien>*@
+@{
+    ViewBag.Title = "profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ Web_QLNS_VTH.Models.TaiKhoan tk;
+    if (Session["taikhoan"] != null)
+    {
+        tk = Session["taikhoan"] as Web_QLNS_VTH.Models.TaiKhoan;
+        using (Html.BeginForm("doiMK", "Manage", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="modal" id="myModal1">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info">
+                            <h5 class="modal-title" id="confirmModalLabel">Thay đổi mật khẩu</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="modal-body row">
+                            <div class="col-4">
+                                <img id="output" class="img-account-profile mb-2 mt-2 border w-100 h-100" src="~/Img/@tk.NhanVien.anh" alt="">
+                            </div>
+                            <div class="col-8">
+                                <div data-mdb-input-init class="form-outline mb-4">
+                                    <label class="form-label">Mật khẩu cũ:</label>
+                                    <input type="password" id="oldMK" name="oldMK" class="form-control form-control-lg" />
+                                </div>
+
+                                <div data-mdb-input-init class="form-outline mb-4">
+                                    <label class="form-label">Mật khẩu mới:</label>
+                                    <input type="password" id="newMK" name="newMK" class="form-control form-control-lg" />
+                                </div>
+                                <div class="pt-1 mb-4">
+                                    <button class="btn btn-dark btn-lg btn-block w-100 text-uppercase fw-bolder" type="submit">Đổi mật khẩu</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <section class="h-100 gradient-custom-2">
+            <div class="container-fluid h-100">
+                <div class="row d-flex justify-content-center">
+                    <div class="col col-lg-9 col-xl-8">
+                        <div class="card">
+                            <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
+                                <div class="ms-4 mt-5" style="width: 150px;">
+                                    <img src="~/Img/@Model.anh"
+                                         alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                                         style="width: 150px; height: 150px; z-index: 1,">
+                                </div>
+                                <div class="ms-3" style="margin-top: 130px;">
+                                    <h5>@Model.hoTen</h5>
+                                    <p>@Model.ChucVu.tenChucVu</p>
+                                </div>
+                            </div>
+                            <div class="p-4 text-black bg-body-tertiary">
+                                <div class="d-flex justify-content-end text-center py-1 text-body">
+                                    <div class="px-3">
+                                        <p class="mb-1 h5">Mã NV</p>
+                                        <p class="small text-muted mb-0">@Model.maNV</p>
+                                    </div>
+                                    <div>
+                                        <p class="mb-1 h5">Giới tính</p>
+                                        <p class="small text-muted mb-0">@Model.gioiTinh</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body p-4 text-black">
+                                <div class="mb-5  text-body">
+                                    <p class="lead fw-bolder mb-1 text-uppercase">Thông tin cá nhân</p>
+                                    <div class="p-4 bg-body-tertiary">
+                                        <p class="font-italic mb-1"><span class="fw-bold">Ngày sinh: &nbsp;</span>@Model.ngaySinh.ToString("dd/MM/yyyy")</p>
+                                        <p class="font-italic mb-1"><span class="fw-bold">Địa chỉ: &nbsp;</span>@Model.diaChi</p>
+                                        <p class="font-italic mb-1"><span class="fw-bold">CCCD: &nbsp;</span>@Model.cccd</p>
+                                        <p class="font-italic mb-1"><span class="fw-bold">Số điện thoại: &nbsp;</span>@Model.sdt</p>
+                                        <p class="font-italic mb-1"><span class="fw-bold">Email: &nbsp;</span>@Model.mail</p>
+                                        <p class="font-italic mb-1"><span class="fw-bold">Trình độ: &nbsp;</span>@Model.trinhDo</p>
+                                        <p class="font-italic mb-1"><span class="fw-bold">Ngày vào công ty: &nbsp;</span>@Model.ngayVaoCT.ToString("dd/MM/yyyy")</p>
+                                    </div>
+                                </div>
+                                <p class="lead fw-bolder mb-5 text-uppercase">Thông tin khác</p>
+                                <div class="row d-flex align-items-center mb-4 text-body">
+                                    <button type="button" onclick="location.href='@Url.Action("tangCaQT", "Manage", new { id = tk.maNV })'" class="btn btn-outline-secondary btn-floating col-3">
+                                        <i class="fas fa-donate fa-lg"></i> Tăng ca
+                                    </button>
+                                    <button type="button" onclick="location.href='@Url.Action("luongQT", "Manage", new { id = tk.maNV })'" class="btn btn-outline-warning btn-floating col-3">
+                                        <i class="fas fa-money-bill fa-lg"></i> Lương
+                                    </button>
+                                    <button type="button" onclick="location.href='@Url.Action("nghiPhepQT", "Manage", new { id = tk.maNV })'" class="btn btn-outline-danger btn-floating col-3">
+                                        <i class="fas fa-calendar fa-lg"></i> Nghỉ phép
+                                    </button>
+                                    <button class="btn btn-outline-dark btn-floating col-3" type="button" data-bs-toggle="modal" data-bs-target="#myModal1">
+                                        <i class="fas fa-exchange-alt fa-lg"></i> Đổi mật khẩu
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>}
+    }
+

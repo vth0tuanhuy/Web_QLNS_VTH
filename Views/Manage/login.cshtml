@@ -1,0 +1,112 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>login</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <link href="~/Content/style.css" rel="stylesheet" />
+    <style>
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
+        }
+
+        .gradient-custom-2 {
+            /* fallback for old browsers */
+            background: #a8e1a1; /* fallback color */
+            /* Chrome 10-25, Safari 5.1-6 */
+            background: -webkit-linear-gradient(to right, #7ed957, #5abf6f, #4cae4c, #388e3c);
+            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            background: linear-gradient(to right, #7ed957, #5abf6f, #4cae4c, #388e3c);
+        }
+    </style>
+</head>
+<body>
+    @if (Session["danger"] != null)
+    {
+        <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="modal-title" id="exampleModalLabel">Đăng nhập thất bại</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <i class="fas fa-exclamation-triangle warning-icon"></i>
+                        <p class="mb-0">Vui lòng nhập lại tài khoản, mật khẩu!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <i class="fas fa-times me-2"></i>Đóng
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+    @{ Session["danger"] = null; }
+    <section class="vh-100 gradient-custom-2 border-0">
+        <div class="container h-100 border-0">
+            <div class="row d-flex justify-content-center align-items-center h-100 border-0">
+                <div class="col col-xl-10 border-0">
+                    <div class="card" style="border-radius: 1rem;">
+                        <div class="row g-0 border-0">
+
+                            <div class="col-5 d-flex justify-content-center align-items-center">
+                                <img src="~/Img/logoft.png"
+                                     alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+                            </div>
+                            <div class="col-1 border-0" style="background-color: #5abf6f">
+
+                            </div>
+                            <div class="col-6 d-flex align-items-center">
+                                <div class="card-body p-4 p-lg-5 text-black">
+                                    @using (Html.BeginForm())
+                                    {
+                                        <div class="d-flex align-items-center mb-3 pb-1">
+                                            <span class="h3 fw-bolder mb-0 text-uppercase text-center w-100 text-success">Công ty TNHH<br /> Thương mại HTCV</span>
+                                        </div>
+                                        <div data-mdb-input-init class="form-outline mb-4">
+                                            <label class="form-label" for="tk">Tài khoản</label>
+                                            <input type="text" id="tk" name="tk" class="form-control form-control-lg" />
+                                        </div>
+
+                                        <div data-mdb-input-init class="form-outline mb-4">
+                                            <label class="form-label" for="mk">Mật khẩu</label>
+                                            <input type="password" id="mk" name="mk" class="form-control form-control-lg" />
+                                        </div>
+
+                                        <div class="pt-1 mb-4">
+                                            <button class="btn btn-dark btn-lg btn-block w-100 text-uppercase fw-bolder" type="submit">Đăng nhập</button>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        $(document).ready(function () {
+            // Hiển thị modal khi trang tải
+            $('#myModal').modal('show');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+﻿@model IEnumerable<Web_QLNS_VTH.Models.TaiKhoan>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex">
+    <button type="button" class="btn btn-outline-primary col-1 fw-bold" data-bs-toggle="modal" data-bs-target="#myModal">
+        <i class="fa fa-plus me-2"></i> Thêm
+    </button>
+    @*@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })*@
+    <h3 class="text-center col-8 text-uppercase fw-bolder">Danh sách tài khoản</h3>
+    <input type="text" id="searchInput" class="form-control col-2" placeholder="Nhập nội dung tên nhân viên......">
+</div>
+<div class="row mt-1" id="cardContainer">
+    <div id="tb"></div>
+    @foreach (var item in Model)
+    {
+        <div class="col-4">
+            <div class="card" style="border-radius: 15px; ">
+                <div class="card-body">
+                    <div class="d-flex">
+                        <div class="flex-shrink-0 ">
+                            <img src="~/Img/@item.NhanVien.anh" alt="" class="img-fluid bg-white" style="border:1px solid black;width: 180px; border-radius: 10px; height:180px">
+                            <p class="text-center mt-2">
+                                <button class="btn btn-outline-danger" type="button" data-bs-toggle="modal" data-bs-target="#confirmModal-@item.maTK">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                        <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
+                                    </svg>
+                                </button>
+                                <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#myModal-@item.maTK">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                    </svg>
+                                </button>
+                                @using (Html.BeginForm("Edit", "TaiKhoans", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <div class="modal" id="myModal-@item.maTK">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-info">
+                                                    <h5 class="modal-title" id="confirmModalLabel">Thông tin tài khoản</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <!-- Modal body -->
+                                                <div class="modal-body">
+                                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                    <div class="form-group">
+                                                        <div class="col-md-10">
+                                                            <label>Tên đăng nhập</label>
+                                                            <input id="tenDangNhap" name="tenDangNhap" class="form-control" value="@item.tenDangNhap"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-md-10">
+                                                            <label>Mật khẩu</label>
+
+                                                            <input id="matKhau" name="matKhau" class="form-control" value="@item.matKhau"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Loại tài khoản</label>
+                                                        <select id="loaiTK" name="loaiTK" class="form-control col-md-10">
+                                                            @foreach (var i in ViewBag.loaiTK as SelectList)
+                                                            {
+                                                                <option value="@i.Value" @(i.Value == item.loaiTK ? "selected" : "")>@i.Text</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Nhân viên</label>
+
+                                                        <select id="maNV" name="maNV" class="form-control col-md-10">
+                                                            @foreach (var i in ViewBag.MaNV as SelectList)
+                                                            {
+                                                                <option value="@i.Value" @(i.Value == item.maNV ? "selected" : "")>@i.Text</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                        <i class="fas fa-times me-2"></i>Thoát
+                                                    </button>
+                                                    <button class="btn btn-primary" type="submit">
+                                                        <i class="fas fa-pencil-square me-2"></i>Sửa
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="modal fade" id="confirmModal-@item.maTK" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-danger">
+                                                <h5 class="modal-title" id="confirmModalLabel">Xác nhận xóa</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                <i class="fas fa-exclamation-triangle warning-icon"></i>
+                                                <p class="mb-0">
+                                                    Bạn có chắc chắn muốn xóa tài khoản @item.maTK không?
+                                                </p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    <i class="fas fa-times me-2"></i>Thoát
+                                                </button>
+                                                <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteConfirmed", "PhongBans",new {id = item.maTK})'">
+                                                    <i class="fas fa-trash-alt me-2"></i>Xóa
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="text-uppercase fw-bolder text-success">@item.NhanVien.hoTen</h5>
+                            <hr>
+                            <p class="mb-2 pb-1 text-bg-success rounded-4 text-center fw-semibold">@item.NhanVien.ChucVu.tenChucVu</p>
+                            <h6>Loại tài khoản: @item.loaiTK</h6>
+                            <hr>
+                            <div class="row">
+                                <div class="col-6">
+                                    <h6 class="fw-bolder">Tài khoản</h6>
+                                    <p class="text-primary">@item.tenDangNhap</p>
+                                </div>
+                                <div class="col-6">
+                                    <h6 class="fw-bolder">Mật khẩu</h6>
+                                    <p class="text-primary">@item.matKhau</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-success">
+
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@using (Html.BeginForm("Create", "TaiKhoans", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal" id="myModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title" id="confirmModalLabel">Thêm tài khoản</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <label>Tên đăng nhập</label>
+                            <input id="tenDangNhap" name="tenDangNhap" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <label>Mật khẩu</label>
+
+                            <input id="matKhau" name="matKhau" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                            <label>Loại tài khoản</label>
+                            <select id="loaiTK" name="loaiTK" class="form-control col-md-10">
+                                @foreach (var item in ViewBag.loaiTK as SelectList)
+                                {
+                                    <option value="@item.Value" @(item.Value == "1" ? "selected" : "")>@item.Text</option>
+                                }
+                            </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nhân viên</label>
+
+                        <select id="maNV" name="maNV" class="form-control col-md-10">
+                            @foreach (var item in ViewBag.MaNV as SelectList)
+                            {
+                                <option value="@item.Value" @(item.Value == "1" ? "selected" : "")>@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Thoát
+                    </button>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-plus me-2"></i>Thêm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    const searchInput = document.getElementById('searchInput');
+    const cardContainer = document.getElementById('cardContainer');
+
+    searchInput.addEventListener('input', function () {
+        const filter = searchInput.value.toLowerCase();
+
+        // Kiểm tra nếu ô tìm kiếm rỗng
+        if (filter === '') {
+            location.reload(); // Tải lại trang
+            return;
+        }
+        const cards = Array.from(cardContainer.getElementsByClassName('col-4')); // Chuyển đổi thành mảng
+
+        // Tạo mảng cho các thẻ khớp
+        const matchedCards = [];
+        const unmatchedCards = [];
+
+        cards.forEach(card => {
+            const name = card.querySelector('h5').textContent.toLowerCase();
+            const additionalText = card.querySelector('p').textContent.toLowerCase(); // Lấy nội dung <p>
+
+            // Kiểm tra nếu tên hoặc nội dung khác khớp với chuỗi tìm kiếm
+            if (name.includes(filter) || additionalText.includes(filter)) {
+                matchedCards.push(card); // Thêm vào mảng thẻ khớp
+            } else {
+                unmatchedCards.push(card); // Thêm vào mảng thẻ không khớp
+            }
+        });
+
+        // Ẩn các thẻ không khớp
+        unmatchedCards.forEach(card => {
+            card.style.display = 'none'; // Ẩn nếu không khớp
+        });
+
+        // Đưa các thẻ khớp lên đầu
+        matchedCards.forEach(card => {
+            card.style.display = ''; // Hiển thị nếu khớp
+            cardContainer.appendChild(card); // Đưa thẻ khớp lên đầu
+        });
+        if (matchedCards.length === 0) {
+
+        }
+
+    });
+</script>

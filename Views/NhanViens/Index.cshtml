@@ -1,0 +1,120 @@
+﻿@model IEnumerable<Web_QLNS_VTH.Models.NhanVien>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script defer src="~/Scripts/tableDemo.js"></script>
+<div class="d-flex">
+    <button class="btn btn-outline-primary col-1 fw-bold" type="button" onclick="location.href='@Url.Action("Create", "NhanViens")'">
+        <i class="fa fa-plus me-2"></i> Thêm
+    </button>
+    @*@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })*@
+    <h3 class="text-center col-11 text-uppercase fw-bolder">Danh sách nhân viên</h3>
+</div>
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+    <thead>
+        <tr style="background-color: #10B1FC;color: white">
+            <th>
+                Mã nhân viên
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.hoTen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChucVu.tenChucVu)
+            </th>
+            <th>
+                Liên lạc
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.cccd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.trinhDo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="tableBody">
+        @foreach (var item in Model)
+        {
+            @*<tr class="" id="row-@item.maNV">*@
+            <tr>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.maNV)
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.anh)*@
+                    @{
+                        string path = "~/Img/" + item.anh;
+                    }
+                    <img src="@Url.Content(path)" style="height: 50px; width: 50px; border-radius: 50%; object-fit: cover; border: 1px solid black; " />
+                    <a href="@Url.Action("Edit","NhanViens",new {id = item.maNV})" class="text-body">
+                        @Html.DisplayFor(modelItem => item.hoTen)
+                    </a>
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.ChucVu.tenChucVu)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.mail)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.cccd)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.trinhDo)
+                </td>
+
+                <td class="align-middle">
+                    @*@Html.ActionLink("Edit", "Edit", new { id = item.maNV }, new { @class = "btn btn-primary" }) |*@
+                    @*<button class="btn btn-outline-primary" type="button" onclick="location.href='@Url.Action("Details", "NhanViens",new {id = item.maNV})'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-file-earmark-medical-fill" viewBox="0 0 16 16">
+                                <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1m-3 2v.634l.549-.317a.5.5 0 1 1 .5.866L7 7l.549.317a.5.5 0 1 1-.5.866L6.5 7.866V8.5a.5.5 0 0 1-1 0v-.634l-.549.317a.5.5 0 1 1-.5-.866L5 7l-.549-.317a.5.5 0 0 1 .5-.866l.549.317V5.5a.5.5 0 1 1 1 0m-2 4.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1m0 2h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1" />
+                            </svg>
+                        </button>*@
+                    <button class="btn btn-outline-success" type="button" onclick="location.href='@Url.Action("Edit", "NhanViens",new {id = item.maNV})'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                        </svg>
+                    </button>
+                    <button class="btn btn-outline-danger" type="button" data-bs-toggle="modal" data-bs-target="#confirmModal-@item.maNV">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
+                        </svg>
+                    </button>
+                    <div class="modal fade" id="confirmModal-@item.maNV" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-danger">
+                                    <h5 class="modal-title" id="confirmModalLabel">Xác nhận xóa</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <i class="fas fa-exclamation-triangle warning-icon"></i>
+                                    <p class="mb-0">
+                                        <img src="@Url.Content(path)" style="height: 100px; width: 100px; border-radius: 50%; object-fit: cover; border: 1px solid black; " />
+                                        <a href="@Url.Action("Edit","NhanViens",new {id = item.maNV})" class="text-body">
+                                            @Html.DisplayFor(modelItem => item.hoTen)
+                                        </a><br />
+                                        Bạn có chắc chắn muốn xóa nhân viên @item.maNV không?
+                                    </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        <i class="fas fa-times me-2"></i>Thoát
+                                    </button>
+                                    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteConfirmed", "NhanViens",new {id = item.maNV})'">
+                                        <i class="fas fa-trash-alt me-2"></i>Xóa
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

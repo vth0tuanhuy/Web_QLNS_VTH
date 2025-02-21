@@ -1,0 +1,199 @@
+﻿@model IEnumerable<Web_QLNS_VTH.Models.Luong>
+@{
+    ViewBag.Title = "luongQT";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<style>
+    .about-list {
+        padding-top: 10px;
+    }
+
+        .about-list .media {
+            padding: 5px 0;
+        }
+
+        .about-list label {
+            color: #20247b;
+            font-weight: 600;
+            margin: 0;
+            position: relative;
+        }
+
+            .about-list label:after {
+                content: "";
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                right: 11px;
+                width: 1px;
+                height: 12px;
+                background: #20247b;
+                -moz-transform: rotate(15deg);
+                -o-transform: rotate(15deg);
+                -ms-transform: rotate(15deg);
+                -webkit-transform: rotate(15deg);
+                transform: rotate(15deg);
+                margin: auto;
+                opacity: 0.5;
+            }
+</style>
+@{ Web_QLNS_VTH.Models.TaiKhoan tk;
+    if (Session["taikhoan"] != null) { 
+        tk = Session["taikhoan"] as Web_QLNS_VTH.Models.TaiKhoan; 
+    <section class="h-100 gradient-custom-2">
+        <div class="container-fluid h-100">
+            <div class="row d-flex justify-content-center">
+                <div class="col col-lg-9 col-xl-8">
+                    <div class="card">
+                        <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
+                            <div class="ms-4 mt-5" style="width: 150px;">
+                                <img src="~/Img/@tk.NhanVien.anh"
+                                     alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                                     style="width: 150px; height: 150px; z-index: 1,">
+                            </div>
+                            <div class="ms-3" style="margin-top: 130px;">
+                                <h5>@tk.NhanVien.hoTen</h5>
+                                <p>@tk.NhanVien.ChucVu.tenChucVu</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body p-4 text-black">
+                            <div class="d-flex justify-content-between align-items-center mb-4 text-body">
+                                <p class="mb-0"><a href="@Url.Action("profile","Manage",new {id= tk.maNV})" class="text-muted">&lt;&lt;&lt; Về profile </a></p>
+                            </div>
+                            <div class="mb-5  text-body">
+                                <span class="text-uppercase h3 fw-bolder text-primary opacity-75"> Lương</span>
+                                <table class="table table-bordered mt-1" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr style="background-color: #10B1FC;color: white">
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.thangNam)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.heSoLuong)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.mucLuong)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.phuCap)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.luongUngTruoc)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.luongNhan)
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.thangNam)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.heSoLuong)
+                                                </td>
+                                                <td>
+                                                    @item.mucLuong.Value.ToString("N0") VND
+                                                </td>
+                                                <td>
+                                                    @item.phuCap.Value.ToString("N0") VND
+                                                </td>
+                                                <td>
+                                                    @item.luongUngTruoc.Value.ToString("N0") VND
+                                                </td>
+                                                <td>
+                                                    @item.luongNhan.Value.ToString("N0") VND
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#myModal-@item.maLuong">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                                        </svg>
+                                                    </button>
+                                                    <div class="modal" id="myModal-@item.maLuong">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header bg-info">
+                                                                    <h5 class="modal-title" id="confirmModalLabel">Thông tin lương</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <!-- Modal body -->
+                                                                <div class="modal-body">
+                                                                    <div class="row about-list">
+                                                                        <div class="col-md-6">
+                                                                            <div class="media">
+                                                                                <label>Mã lương</label>
+                                                                                <p>@item.maLuong</p>
+                                                                            </div>
+
+                                                                            <div class="media">
+                                                                                <label>Bậc lương</label>
+                                                                                <p>@item.bacLuong</p>
+                                                                            </div>
+                                                                            <div class="media">
+                                                                                <label>Hệ số lương</label>
+                                                                                <p>@item.heSoLuong</p>
+                                                                            </div>
+                                                                            <div class="media">
+                                                                                <label>Mức lương</label>
+                                                                                <p>@item.mucLuong.Value.ToString("N0") VND</p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+
+                                                                            <div class="media">
+                                                                                <label>Phụ cấp</label>
+                                                                                <p>@item.phuCap.Value.ToString("N0") VND</p>
+                                                                            </div>
+                                                                            <div class="media">
+                                                                                <label>Số ngày công</label>
+                                                                                <p>@item.soNgayCong</p>
+                                                                            </div>
+                                                                            <div class="media">
+                                                                                <label>Số ngày nghỉ</label>
+                                                                                <p>@item.nghiKhongPhep</p>
+                                                                            </div>
+                                                                            <div class="media">
+                                                                                <label>Lương ứng trước</label>
+                                                                                <p>@item.luongUngTruoc.Value.ToString("N0") VND</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr />
+                                                                    <div class="w-100">
+                                                                        <p class="h4 text-uppercase">Lương: <span class="text-primary h3"> @item.luongNhan.Value.ToString("N0") VND</span></p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                                        <i class="fas fa-times me-2"></i>Thoát
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    }
+} 
+
+
+

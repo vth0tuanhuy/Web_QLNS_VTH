@@ -1,0 +1,135 @@
+﻿@model IEnumerable<Web_QLNS_VTH.Models.NghiPhep>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var today = DateTime.Now.ToString("yyyy-MM-dd"); // Định dạng ngày
+}
+<script defer src="~/Scripts/tableDemo.js"></script>
+<div class="d-flex">
+    <button type="button" class="btn btn-outline-primary col-1 fw-bold" data-bs-toggle="modal" data-bs-target="#myModal">
+        <i class="fa fa-plus me-2"></i> Thêm
+    </button>
+    @*@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })*@
+    <h3 class="text-center col-11 text-uppercase fw-bolder">Danh sách nghỉ phép</h3>
+</div>
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+    <thead>
+        <tr style="background-color: #10B1FC;color: white">
+            <th>
+                Mã nhân viên
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NhanVien.hoTen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NhanVien.ChucVu.tenChucVu)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NhanVien.ChucVu.PhongBan.tenPhongBan)
+            </th>
+            <th>
+                Số ngày nghỉ
+            </th>
+            <th>
+                Số ngày nghỉ còn lại
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.NV)
+        {
+            <tr class="" id="row-@item.maNV">
+                <td class="align-middle">
+                    @item.maNV
+                </td>
+                <td>
+                    <img src="~/Img/@item.anh" style="height: 50px; width: 50px; border-radius: 50%; object-fit: cover; border: 1px solid black; " />
+                    @item.hoTen
+                </td>
+                <td class="align-middle">
+                    @item.ChucVu.tenChucVu
+                </td>
+                <td class="align-middle">
+                    @item.ChucVu.PhongBan.tenPhongBan
+                </td>
+                @{
+                    var n = new Web_QLNS_VTH.Controllers.ManageController();
+                    int soNgayNP = n.soNPTrongNam(DateTime.Now.Year, item.maNV);
+                }
+                <td class="align-middle">
+                    @soNgayNP
+                    @*@String.Format("{0:dd/MM/yyyy}", item.ngaySinh)*@
+                </td>
+                <td class="align-middle">
+                    @(15 - soNgayNP)
+                </td>
+
+                <td class="align-middle">
+                    @*@Html.ActionLink("Edit", "Edit", new { id = item.maNV }, new { @class = "btn btn-primary" }) |*@
+                    @*<button class="btn btn-outline-primary" type="button" onclick="location.href='@Url.Action("Details", "NhanViens",new {id = item.maNV})'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-file-earmark-medical-fill" viewBox="0 0 16 16">
+                                <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1m-3 2v.634l.549-.317a.5.5 0 1 1 .5.866L7 7l.549.317a.5.5 0 1 1-.5.866L6.5 7.866V8.5a.5.5 0 0 1-1 0v-.634l-.549.317a.5.5 0 1 1-.5-.866L5 7l-.549-.317a.5.5 0 0 1 .5-.866l.549.317V5.5a.5.5 0 1 1 1 0m-2 4.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1m0 2h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1" />
+                            </svg>
+                        </button>*@
+                    <button class="btn btn-outline-success" type="button" onclick="location.href='@Url.Action("NghiPhepNV", "NghiPheps",new {id = item.maNV})'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                        </svg>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@using (Html.BeginForm("Create", "NghiPheps", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal" id="myModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title" id="confirmModalLabel">Thêm nghỉ phép</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <label>Nhân viên</label>
+                            <select id="maNV" name="maNV" class="form-control col-md-10">
+                                @foreach (var item in ViewBag.maNV as SelectList)
+                                {
+                                    <option value="@item.Value" @(item.Value == "1" ? "selected" : "")>@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <label>Từ ngày</label>
+                                <input type="date" id="tuNgay" name="tuNgay" class="form-control" value="@today" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <label>Đến ngày</label>
+                                <input type="date" id="denNgay" name="denNgay" class="form-control" value="@today" />
+                            </div>
+                        </div>
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Thoát
+                    </button>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-plus me-2"></i>Thêm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

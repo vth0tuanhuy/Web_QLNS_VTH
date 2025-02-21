@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Web_QLNS_VTH.Models.NghiPhep>
+@{
+    ViewBag.Title = "showNghiPhep";
+    Layout = "~/Views/Shared/LayoutClient.cshtml";
+}
+@{string maNV =""; if(Session["taikhoan"] != null) { Web_QLNS_VTH.Models.TaiKhoan tk = Session["taikhoan"] as Web_QLNS_VTH.Models.TaiKhoan;maNV = tk.maNV; } }
+<div class="d-flex justify-content-between align-items-center mb-4 text-body">
+    <span class="text-uppercase h3 fw-bolder text-primary opacity-75">Nghỉ phép</span>
+    <p class="mb-0"><a href="@Url.Action("showYeuCauNP","Client",new {id = maNV})" class="text-muted">Yêu cầu nghỉ phép &gt;&gt;&gt;</a></p>
+</div>
+
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+    <thead>
+        <tr style="background-color: #10B1FC;color: white">
+            <th>
+                @Html.DisplayNameFor(model => model.maNghiPhep)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.tuNgay)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.denNgay)
+            </th>
+            <th>
+                Số ngày nghỉ
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.maNghiPhep)
+            </td>
+            <td>
+                @String.Format("{0:dd/MM/yyyy}", item.tuNgay)
+            </td>
+            <td>
+                @String.Format("{0:dd/MM/yyyy}", item.denNgay)
+            </td>
+            <td>
+                @((item.denNgay.Value - item.tuNgay.Value).Days)
+            </td>
+            <td>
+                <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#myModal-@item.maNghiPhep">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                    </svg>
+                </button>
+                <div class="modal" id="myModal-@item.maNghiPhep">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header bg-info">
+                                <h5 class="modal-title" id="confirmModalLabel">Thông tin nghỉ phép</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="form-group">
+                                    <div class="col-md-10">
+                                        <label>Từ ngày</label>
+                                        <input type="text" id="tuNgay" name="tuNgay" class="form-control" value="@item.tuNgay.Value.ToString("dd/MM/yyyy")" readonly />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-10">
+                                        <label>Đến ngày</label>
+                                        <input type="text" id="denNgay" name="denNgay" class="form-control" value="@item.denNgay.Value.ToString("dd/MM/yyyy")" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fas fa-times me-2"></i>Thoát
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    }
+</table>
+

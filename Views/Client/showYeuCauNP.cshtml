@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Web_QLNS_VTH.Models.YeuCauNP>
+@{
+    ViewBag.Title = "showYeuCauNP";
+    Layout = "~/Views/Shared/LayoutClient.cshtml";
+}
+<span class="text-uppercase h3 fw-bolder text-primary opacity-75 "> Tạo yêu cầu nghỉ phép</span>
+@using (Html.BeginForm("showYeuCauNP", "Client", FormMethod.Post, new { enctype = "multipart/form-data", @class= "container border border-1 border-dark mt-2 rounded-4" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group row py-3 ">
+        <div class="col-md-6">
+            <label>Bắt đầu từ</label>
+            <input id="tuNgay" name="tuNgay" type="date" value="2025-01-01" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label>Đến hết ngày</label>
+            <input id="denNgay" name="denNgay" type="date" value="2025-01-01" class="form-control" />
+        </div>
+
+    </div>
+    <button type="submit" class="btn btn-primary w-100 my-3">Gửi</button>
+}
+<span class="text-uppercase h3 fw-bolder text-primary opacity-75  mt-lg-3"> Danh sách yêu cầu của bạn</span>
+<table class="table table-bordered py-3" id="dataTable" width="100%" cellspacing="0">
+    <thead>
+        <tr style="background-color: #10B1FC;color: white">
+            <th class="">
+                Mã yêu cầu
+            </th>
+            <th class="">
+                Từ ngày
+            </th>
+            <th class="">
+                Đến ngày
+            </th>
+            <th class="">
+                Tình trạng
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="" id="row">
+                <td class="align-middle">
+                    @item.maYeuCauNP
+                </td>
+                <td class="align-middle">
+                    @String.Format("{0:dd/MM/yyyy}", item.tuNgay)
+                </td>
+                <td class="align-middle">
+                    @String.Format("{0:dd/MM/yyyy}", item.denNgay)
+                </td>
+                @if (item.tinhTrang == "Chưa duyệt")
+                {
+                    <td class="align-middle bg-warning  rounded-2 text-center fw-bold text-white">
+                        <span class="text-center fw-bolder" style="width:100%"> @item.tinhTrang</span>
+                    </td>
+                }
+                else if (item.tinhTrang == "Đã chấp nhận")
+                {
+                    <td class="align-middle bg-success  rounded-2 text-center fw-bold text-white">
+                        <span class="text-center fw-bolder" style="width:100%"> @item.tinhTrang</span>
+                    </td>
+                }
+                else
+                {
+                    <td class="align-middle bg-danger  rounded-2 text-center fw-bold text-white">
+                        <span class="text-center fw-bolder" style="width:100%"> @item.tinhTrang</span>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+

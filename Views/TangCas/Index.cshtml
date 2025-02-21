@@ -1,0 +1,226 @@
+﻿@model IEnumerable<Web_QLNS_VTH.Models.TangCa>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script defer src="~/Scripts/tableDemo.js"></script>
+<div class="d-flex">
+    <button type="button" class="btn btn-outline-primary col-1 fw-bold" data-bs-toggle="modal" data-bs-target="#myModal">
+        <i class="fa fa-plus me-2"></i> Thêm
+    </button>
+    @*@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })*@
+    <h3 class="text-center col-11 text-uppercase fw-bolder">Danh sách tăng ca</h3>
+</div>
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+    <thead>
+        <tr style="background-color: #10B1FC;color: white">
+            <th>
+                Mã tăng ca
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NhanVien.hoTen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NhanVien.ChucVu.tenChucVu)
+            </th>
+            <th>
+                Phòng ban
+            </th>
+            <th>
+                Số giờ tăng ca
+            </th>
+            <th>
+                Ngày tăng ca
+            </th>
+            <th>
+                Loại tăng ca
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="" id="row-@item.maTangCa">
+                <td class="align-middle">
+                    @item.maTangCa
+                </td>
+                <td>
+                    <img src="~/Img/@item.NhanVien.anh" style="height: 50px; width: 50px; border-radius: 50%; object-fit: cover; border: 1px solid black; " />
+                    @item.NhanVien.hoTen
+                </td>
+                <td class="align-middle">
+                    @item.NhanVien.ChucVu.tenChucVu
+                </td>
+                <td class="align-middle">
+                    @item.NhanVien.ChucVu.PhongBan.tenPhongBan
+                </td>
+                <td class="align-middle">
+                    @item.soGio
+                </td>
+                <td class="align-middle">
+                    @String.Format("{0:dd/MM/yyyy}", item.ngayTangCa)
+                </td>
+                <td class="align-middle">
+                    @item.loaiTangCa
+                </td>
+
+                <td class="align-middle">
+                    @*@Html.ActionLink("Edit", "Edit", new { id = item.maNV }, new { @class = "btn btn-primary" }) |*@
+                    <button class="btn btn-outline-danger" type="button" data-bs-toggle="modal" data-bs-target="#confirmModal-@item.maTangCa">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
+                        </svg>
+                    </button>
+                    <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#myModal-@item.maTangCa">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                        </svg>
+                    </button>
+                    @using (Html.BeginForm("Edit", "TaiKhoans", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="modal" id="myModal-@item.maTangCa">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-info">
+                                        <h5 class="modal-title" id="confirmModalLabel">Thông tin tài khoản</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <!-- Modal body -->
+                                    <div class="modal-body">
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                        <div class="form-group col-md-10">
+                                            <label>Nhân viên</label>
+                                            <select id="maNV" name="maNV" class="form-control">
+                                                @foreach (var item1 in ViewBag.MaNV as SelectList)
+                                                {
+                                                    <option value="@item1.Value" @(item1.Value == item.maNV ? "selected" : "")>@item1.Text</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-10">
+                                                <label>Số giờ</label>
+                                                <input type="number" id="soGio" name="soGio" class="form-control" value="@item.soGio" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-10">
+                                                <label>Ngày tăng ca</label>
+
+                                                <input type="date" id="ngayTangCa" name="ngayTangCa" class="form-control" value="@item.ngayTangCa.Value.ToString("yyyy-MM-dd")" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Loại tăng ca</label>
+                                            <select id="loaiTangCa" name="loaiTangCa" class="form-control col-md-10">
+                                                @foreach (var item1 in ViewBag.loaiTC as SelectList)
+                                                {
+                                                    <option value="@item1.Value" @(item1.Value == item.loaiTangCa ? "selected" : "")>@item1.Text</option>
+                                                }
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            <i class="fas fa-times me-2"></i>Thoát
+                                        </button>
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="fas fa-pencil-square me-2"></i>Sửa
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div class="modal fade" id="confirmModal-@item.maTangCa" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-danger">
+                                    <h5 class="modal-title" id="confirmModalLabel">Xác nhận xóa</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <i class="fas fa-exclamation-triangle warning-icon"></i>
+                                    <p class="mb-0">
+                                        Bạn có chắc chắn muốn xóa tăng ca @item.maTangCa không?
+                                    </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        <i class="fas fa-times me-2"></i>Thoát
+                                    </button>
+                                    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteConfirmed", "TangCas",new {id = item.maTangCa})'">
+                                        <i class="fas fa-trash-alt me-2"></i>Xóa
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@using (Html.BeginForm("Create", "TangCas", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal" id="myModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title" id="confirmModalLabel">Thêm tăng ca</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group col-md-10">
+                        <label>Nhân viên</label>
+                        <select id="maNV" name="maNV" class="form-control">
+                            @foreach (var item in ViewBag.MaNV as SelectList)
+                            {
+                                <option value="@item.Value" @(item.Value == "1" ? "selected" : "")>@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <label>Số giờ</label>
+                            <input type="number" id="soGio" name="soGio" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <label>Ngày tăng ca</label>
+
+                            <input type="date" id="ngayTangCa" name="ngayTangCa" class="form-control" value="2025-01-01"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Loại tăng ca</label>
+                        <select id="loaiTangCa" name="loaiTangCa" class="form-control col-md-10">
+                            @foreach (var item in ViewBag.loaiTC as SelectList)
+                            {
+                                <option value="@item.Value" @(item.Value == "1" ? "selected" : "")>@item.Text</option>
+                            }
+                        </select>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Thoát
+                    </button>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-plus me-2"></i>Thêm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

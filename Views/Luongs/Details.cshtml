@@ -1,0 +1,119 @@
+﻿@model Web_QLNS_VTH.Models.Luong
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container w-75 rounded-3 p-3 border border-4 border-dark border-opacity-25">
+    <h2 class="text-uppercase">Thông tin - @Model.maLuong</h2>
+    <div class="row">
+        <!-- Nửa bên trái -->
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.maNV, "Nhân viên", htmlAttributes: new { @class = "control-label col-md-2 fw-bold" })
+                <div class="col-md-10">
+                    <input type="text" class="form-control" value="@Model.NhanVien.hoTen" disabled />
+                    @Html.ValidationMessageFor(model => model.maNV, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.thangNam, htmlAttributes: new { @class = "control-label col-md-2 fw-bold" })
+                <div class="col-md-10">
+                    @*@Html.EditorFor(model => model.thangNam, new { htmlAttributes = new { @class = "form-control" } })*@
+                    @Html.EditorFor(model => model.thangNam, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    @Html.ValidationMessageFor(model => model.thangNam, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.bacLuong, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.bacLuong, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    @Html.ValidationMessageFor(model => model.bacLuong, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.heSoLuong, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.heSoLuong, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    @Html.ValidationMessageFor(model => model.heSoLuong, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Phụ cấp chức vụ</label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" value="@ViewBag.PCCV.ToString("N0") VND" disabled />
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Phụ cấp thâm niên</label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" value="@ViewBag.PCTN.ToString("N0") VND" disabled />
+                </div>
+            </div>
+        </div>
+
+        <!-- Nửa bên phải -->
+        <div class="col-md-6">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.mucLuong, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input type="text" class="form-control" value="@Model.mucLuong.Value.ToString("N0") VND" disabled />
+                    @Html.ValidationMessageFor(model => model.mucLuong, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.phuCap, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input type="text" class="form-control" value="@Model.phuCap.Value.ToString("N0") VND" disabled />
+                    @Html.ValidationMessageFor(model => model.phuCap, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.soNgayCong, htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.soNgayCong, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    @Html.ValidationMessageFor(model => model.soNgayCong, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.nghiKhongPhep, htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.nghiKhongPhep, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    @Html.ValidationMessageFor(model => model.nghiKhongPhep, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.luongUngTruoc, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input type="text" class="form-control" value="@Model.luongUngTruoc.Value.ToString("N0") VND" disabled />
+                    @Html.ValidationMessageFor(model => model.luongUngTruoc, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.luongNhan, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input type="text" class="form-control" value="@Model.luongNhan.Value.ToString("N0") VND" disabled />
+                    @Html.ValidationMessageFor(model => model.luongNhan, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-end mt-1 p-1">
+        <button type="button" onclick="location.href='@Url.Action("Edit", "Luongs",new {id = Model.maLuong})'" class="btn btn-primary col-3"><i class="fas fa-wrench mx-2"></i>Sửa</button>
+    </div>
+</div>
+<p>
+    @*@Html.ActionLink("Edit", "Edit",new { id = Model.maLuong }) |*@
+    @Html.ActionLink("Back to List", "Index")
+</p>

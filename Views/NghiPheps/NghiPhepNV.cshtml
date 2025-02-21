@@ -1,0 +1,166 @@
+﻿@model IEnumerable<Web_QLNS_VTH.Models.NghiPhep>
+@{
+    ViewBag.Title = "NghiPhepNV";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script defer src="~/Scripts/tableDemo.js"></script>
+@{
+    Web_QLNS_VTH.Models.NhanVien nv = ViewBag.NVChon;
+}
+<section style="background-color: #9de2ff; border-radius: .5rem .5rem 0 0;">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <img src="~/Img/@nv.anh" alt="avatar"
+                             class="img-fluid" style="width: 200px;">
+                        <h5 class="my-3">
+                            @nv.hoTen
+                        </h5>
+                        <p class="text-muted mb-1">@nv.maNV</p>
+                        <p class="text-muted mb-4">@nv.ChucVu.tenChucVu</p>
+                        <div class="d-flex justify-content-center mb-2">
+                            <a href='@Url.Action("Index", "NghiPheps")' class="btn btn-outline-primary ms-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
+                                    <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1" />
+                                </svg>
+                                Trở về
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr style="background-color: #10B1FC;color: white">
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.maNghiPhep)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.tuNgay)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.denNgay)
+                                    </th>
+                                    <th>
+                                        Số ngày nghỉ
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.maNghiPhep)
+                                    </td>
+                                    <td>
+                                        @String.Format("{0:dd/MM/yyyy}", item.tuNgay)
+                                    </td>
+                                    <td>
+                                        @String.Format("{0:dd/MM/yyyy}", item.denNgay)
+                                    </td>
+                                    <td>
+                                        @((item.denNgay.Value - item.tuNgay.Value).Days)
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-outline-danger" type="button" data-bs-toggle="modal" data-bs-target="#confirmModal-@item.maNghiPhep">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                                <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5" />
+                                            </svg>
+                                        </button>
+                                        <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#myModal-@item.maNghiPhep">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                            </svg>
+                                        </button>
+                                        @using (Html.BeginForm("Edit", "NghiPheps", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <div class="modal" id="myModal-@item.maNghiPhep">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-info">
+                                                            <h5 class="modal-title" id="confirmModalLabel">Thông tin nghỉ phép</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <!-- Modal body -->
+                                                        <div class="modal-body">
+                                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                                            <div class="form-group">
+                                                                <div class="col-md-10">
+                                                                    <label>Nhân viên</label>
+                                                                    <select id="maNV" name="maNV" class="form-control col-md-10" required>
+                                                                        @foreach (var item1 in ViewBag.maNV as SelectList)
+                                                                        {
+                                                                            <option value="@item1.Value" @(item1.Value == item.maNV ? "selected" : "")>@item1.Text</option>
+                                                                        }
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="col-md-10">
+                                                                    <label>Từ ngày</label>
+                                                                    <input type="date" id="tuNgay" name="tuNgay" class="form-control" value="@item.tuNgay.Value.ToString("yyyy-MM-dd")" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <div class="col-md-10">
+                                                                    <label>Đến ngày</label>
+                                                                    <input type="date" id="denNgay" name="denNgay" class="form-control" value="@item.denNgay.Value.ToString("yyyy-MM-dd")" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                                <i class="fas fa-times me-2"></i>Thoát
+                                                            </button>
+                                                            <button class="btn btn-primary" type="submit">
+                                                                <i class="fas fa-pencil-square me-2"></i>Sửa
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                        <div class="modal fade" id="confirmModal-@item.maNghiPhep" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header bg-danger">
+                                                        <h5 class="modal-title" id="confirmModalLabel">Xác nhận xóa</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body text-center">
+                                                        <i class="fas fa-exclamation-triangle warning-icon"></i>
+                                                        <p class="mb-0">
+                                                            Bạn có chắc chắn muốn xóa nghỉ phép @item.maNghiPhep không?
+                                                        </p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                            <i class="fas fa-times me-2"></i>Thoát
+                                                        </button>
+                                                        <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteConfirmed", "NghiPheps",new {id = item.maNghiPhep})'">
+                                                            <i class="fas fa-trash-alt me-2"></i>Xóa
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
