@@ -57,19 +57,19 @@
                     @Html.DisplayFor(modelItem => item.heSoLuong)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.mucLuong)
+                    @item.mucLuong.Value.ToString("N0") VND
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.phuCap)
+                    @item.phuCap.Value.ToString("N0") VND
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.soNgayCong)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.luongUngTruoc)
+                    @item.luongUngTruoc.Value.ToString("N0") VND
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.luongNhan)
+                    @item.luongNhan.Value.ToString("N0") VND
                 </td>
                 <td>
                     <button class="btn btn-outline-success" type="button" onclick="location.href='@Url.Action("Details", "Luongs",new {id = item.maLuong})'">
@@ -88,7 +88,7 @@
         }
     </tbody>
 </table>
-<div class="card shadow mb-4" style="width:500px">
+@*<div class="card shadow mb-4" style="width:500px">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Bar Chart</h6>
     </div>
@@ -100,7 +100,7 @@
         Styling for the bar chart can be found in the
         <code>/js/demo/chart-bar-demo.js</code> file.
     </div>
-</div>
+</div>*@
 @{
     List<string> ls = new List<string> { "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6" };
 }

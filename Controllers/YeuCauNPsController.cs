@@ -13,12 +13,39 @@ namespace Web_QLNS_VTH.Controllers
     public class YeuCauNPsController : Controller
     {
         private Model1 db = new Model1();
-
+        public List<NhanVien> getNVs()
+        {
+            TaiKhoan taiKhoan = Session["taikhoan"] as TaiKhoan;
+            var nv = db.NhanViens.ToList();
+            if (taiKhoan.loaiTK == "QL")
+            {
+                nv = nv.Where(x => x.ChucVu.maPhongBan == taiKhoan.NhanVien.ChucVu.maPhongBan && x.maChucVu != taiKhoan.NhanVien.maChucVu).ToList();
+            }
+            return nv;
+        }
         // GET: YeuCauNPs
         public ActionResult Index()
         {
+            TaiKhoan taiKhoan = Session["taikhoan"] as TaiKhoan;
             var yeuCauNPs = db.YeuCauNPs.Include(y => y.NhanVien);
-            return View(yeuCauNPs.ToList());
+            if (taiKhoan != null)
+            {
+                if (taiKhoan.loaiTK == "AD")
+                {
+                    ViewBag.maNV = new SelectList(getNVs(), "maNV", "hoTen");
+                    ViewBag.NV = db.NhanViens.ToList();
+                    return View(yeuCauNPs.ToList());
+                }
+                else if (taiKhoan.loaiTK == "QL")
+                {
+                    ViewBag.maNV = new SelectList(getNVs(), "maNV", "hoTen");
+                    ViewBag.NV = db.NhanViens.Where(x => x.ChucVu.maPhongBan == taiKhoan.NhanVien.ChucVu.maPhongBan && x.maNV != taiKhoan.maNV).ToList();
+                    yeuCauNPs = yeuCauNPs.Where(x => x.NhanVien.ChucVu.maPhongBan == taiKhoan.NhanVien.ChucVu.maPhongBan && x.maNV != taiKhoan.maNV);
+                    return View(yeuCauNPs.ToList());
+                }
+            }
+
+            return HttpNotFound();
         }
         public ActionResult XacNhan(string id, string xn)
         {

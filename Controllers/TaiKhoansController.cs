@@ -61,10 +61,12 @@ namespace Web_QLNS_VTH.Controllers
         {
             if (ModelState.IsValid)
             {
+                if(manageController.checkTK(taiKhoan.tenDangNhap) == (db.TaiKhoans.FirstOrDefault(x=>x.maNV == taiKhoan.maNV)==null)){ 
                 taiKhoan.maTK = manageController.tuSinhMa(db.TaiKhoans.Max(x => x.maTK));
                 db.TaiKhoans.Add(taiKhoan);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index");}
+                Session["danger"] = "Tài khoản nhân viên ngày đã tồn tại";
             }
             ViewBag.loaiTK = new SelectList(loaiTKList, "Value", "Text", taiKhoan.loaiTK);
             ViewBag.maNV = new SelectList(db.NhanViens, "maNV", "hoTen", taiKhoan.maNV);
@@ -96,11 +98,15 @@ namespace Web_QLNS_VTH.Controllers
         {
             if (ModelState.IsValid)
             {
-                
-                db.Entry(taiKhoan).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (manageController.checkTK(taiKhoan.tenDangNhap) == (db.TaiKhoans.FirstOrDefault(x => x.maNV == taiKhoan.maNV) == null))
+                {
+                    db.Entry(taiKhoan).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                Session["danger"] = "Tài khoản nhân viên ngày đã tồn tại";
             }
+            ViewBag.loaiTK = new SelectList(loaiTKList, "Value", "Text", taiKhoan.loaiTK);
             ViewBag.maNV = new SelectList(db.NhanViens, "maNV", "hoTen", taiKhoan.maNV);
             return View(taiKhoan);
         }

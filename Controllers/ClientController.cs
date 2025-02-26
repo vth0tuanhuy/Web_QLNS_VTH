@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
@@ -33,6 +34,42 @@ namespace Web_QLNS_VTH.Controllers
                 return View(nv);
             }
             return HttpNotFound();
+        }
+        public ActionResult doiMK()
+        {
+            if (Session["taikhoan"] != null)
+            {
+                TaiKhoan tk = Session["taikhoan"] as TaiKhoan;
+                NhanVien nv = db.NhanViens.Find(tk.maNV);
+                ViewBag.anh = tk.NhanVien.anh;
+            }
+            return View(); }
+        [HttpPost]
+        public ActionResult doiMK(string oldMK, string newMK)
+        {
+            TaiKhoan tk = Session["taikhoan"] as TaiKhoan;
+
+            if (tk != null && tk.matKhau == oldMK)
+            {
+                // Cập nhật mật khẩu  
+                TaiKhoan tkc = db.TaiKhoans.Find(tk.maTK);
+                db.TaiKhoans.Attach(tkc);
+                tkc.matKhau = newMK;
+                // Lưu các thay đổi vào cơ sở dữ liệu
+                db.Entry(tkc).State = EntityState.Modified;
+                db.SaveChanges();
+
+                // Chuyển hướng đến trang đăng nhập
+                return RedirectToAction("login", "Manage", null);
+            }
+            if (Session["taikhoan"] != null)
+            {
+                tk = Session["taikhoan"] as TaiKhoan;
+                NhanVien nv = db.NhanViens.Find(tk.maNV);
+                ViewBag.anh = tk.NhanVien.anh;
+            }
+            // Nếu không thành công, trả về view hiện tại
+            return View();
         }
         public ActionResult showTC(string id)
         {

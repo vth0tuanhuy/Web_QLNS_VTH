@@ -87,10 +87,14 @@ namespace Web_QLNS_VTH.Controllers
         {
             if (ModelState.IsValid)
             {
-                nghiPhep.maNghiPhep = manageController.tuSinhMa(db.NghiPheps.Max(x => x.maNghiPhep));
-                db.NghiPheps.Add(nghiPhep);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if(manageController.checkTimePhuHop((DateTime)nghiPhep.tuNgay, (DateTime)nghiPhep.denNgay, nghiPhep.maNV))
+                {
+                    nghiPhep.maNghiPhep = manageController.tuSinhMa(db.NghiPheps.Max(x => x.maNghiPhep));
+                    db.NghiPheps.Add(nghiPhep);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                Session["danger"] = manageController.danger;
             }
 
             ViewBag.maNV = new SelectList(db.NhanViens, "maNV", "hoTen", nghiPhep.maNV);

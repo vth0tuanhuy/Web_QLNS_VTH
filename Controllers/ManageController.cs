@@ -80,7 +80,7 @@ namespace Web_QLNS_VTH.Controllers
             }
 
             // Nếu không thành công, trả về view hiện tại
-            return View();
+            return RedirectToAction("Index","NhanViens");
         }
         // GET: Manage
         public ActionResult login()
@@ -462,6 +462,30 @@ namespace Web_QLNS_VTH.Controllers
         public decimal luongNhan(string maNV, int month, int year, int soNghi, decimal ungTrc)
         {
             return Decimal.Truncate(tongLuong(maNV, month, year, soNghi) - ungTrc);
+        }
+        public bool checkNgayHopLe(DateTime ngay, string maNV)
+        {
+            var nv = db.NhanViens.Find(maNV);
+            if(ngay < (DateTime)nv.ngaySinh || ngay < (DateTime)nv.ngayVaoCT)
+            {
+                danger = "Vui lòng nhập thời gian phù hợp";
+                return false;
+            }
+            return true;
+        }
+        public bool checkLuong(string maNV, string thangNam)
+        {
+            if(db.Luongs.FirstOrDefault(x=>x.maNV == maNV && x.thangNam == thangNam) != null)
+            {
+                danger = "Lương tháng này đã tồn tại";
+                return false;
+            }
+            return true;
+        }
+        public bool checkTimeLonNho(DateTime dn,DateTime dl)
+        {
+            if (dl > dn) return true;
+            else return false;
         }
     }
 }

@@ -14,6 +14,16 @@ namespace Web_QLNS_VTH.Controllers
     {
         private Model1 db = new Model1();
         ManageController manageController = new ManageController();
+        public List<NhanVien> getNVs()
+        {
+            TaiKhoan taiKhoan = Session["taikhoan"] as TaiKhoan;
+            var nv = db.NhanViens.ToList();
+            if (taiKhoan.loaiTK == "QL")
+            {
+                nv = nv.Where(x => x.ChucVu.maPhongBan == taiKhoan.NhanVien.ChucVu.maPhongBan && x.maChucVu != taiKhoan.NhanVien.maChucVu).ToList();
+            }
+            return nv;
+        }
         // GET: TangCas
         List<SelectListItem> loaiTCList = new List<SelectListItem>
         {
@@ -22,10 +32,26 @@ namespace Web_QLNS_VTH.Controllers
         };
         public ActionResult Index()
         {
-            ViewBag.maNV = new SelectList(db.NhanViens, "maNV", "hoTen");
+            TaiKhoan taiKhoan = Session["taikhoan"] as TaiKhoan;
+            ViewBag.maNV = new SelectList(getNVs(), "maNV", "hoTen");
             ViewBag.loaiTC = new SelectList(loaiTCList, "Value", "Text");
-
             var tangCas = db.TangCas.Include(t => t.NhanVien);
+            if (taiKhoan != null)
+            {
+                if (taiKhoan.loaiTK == "AD")
+                {
+                    ViewBag.maNV = new SelectList(getNVs(), "maNV", "hoTen");
+                    ViewBag.NV = db.NhanViens.ToList();
+                    return View(tangCas.ToList());
+                }
+                else if (taiKhoan.loaiTK == "QL")
+                {
+                    ViewBag.maNV = new SelectList(getNVs(), "maNV", "hoTen");
+                    ViewBag.NV = db.NhanViens.Where(x => x.ChucVu.maPhongBan == taiKhoan.NhanVien.ChucVu.maPhongBan && x.maNV != taiKhoan.maNV).ToList();
+                    tangCas = tangCas.Where(x => x.NhanVien.ChucVu.maPhongBan == taiKhoan.NhanVien.ChucVu.maPhongBan && x.maNV != taiKhoan.maNV);
+                    return View(tangCas.ToList());
+                }
+            }
             return View(tangCas.ToList());
         }
 
@@ -66,7 +92,7 @@ namespace Web_QLNS_VTH.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.maNV = new SelectList(db.NhanViens, "maNV", "hoTen", tangCa.maNV);
+            ViewBag.maNV = new SelectList(getNVs(), "maNV", "hoTen", tangCa.maNV);
             return View(tangCa);
         }
 
@@ -82,7 +108,7 @@ namespace Web_QLNS_VTH.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.maNV = new SelectList(db.NhanViens, "maNV", "hoTen", tangCa.maNV);
+            ViewBag.maNV = new SelectList(getNVs(), "maNV", "hoTen", tangCa.maNV);
             return View(tangCa);
         }
 

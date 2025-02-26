@@ -15,7 +15,16 @@ namespace Web_QLNS_VTH.Controllers
     {
         public Model1 db = new Model1();
         ManageController manageController = new ManageController();
-
+        public List<NhanVien> getNVs()
+        {
+            TaiKhoan taiKhoan = Session["taikhoan"] as TaiKhoan;
+            var nv = db.NhanViens.ToList();
+            if (taiKhoan.loaiTK == "QL")
+            {
+                nv = nv.Where(x => x.ChucVu.maPhongBan == taiKhoan.NhanVien.ChucVu.maPhongBan && x.maChucVu != taiKhoan.NhanVien.maChucVu).ToList();
+            }
+            return nv;
+        }
         // GET: Luongs
         public JsonResult GetEmployeeData(string maNV)
         {
@@ -28,8 +37,25 @@ namespace Web_QLNS_VTH.Controllers
         }
         public ActionResult Index()
         {
+            TaiKhoan taiKhoan = Session["taikhoan"] as TaiKhoan;
             var luongs = db.Luongs.Include(l => l.NhanVien);
-            return View(luongs.ToList());
+            if (taiKhoan != null)
+            {
+                if (taiKhoan.loaiTK == "AD")
+                {
+                    ViewBag.maNV = new SelectList(getNVs(), "maNV", "hoTen");
+                    ViewBag.NV = db.NhanViens.ToList();
+                    return View(luongs.ToList());
+                }
+                else if (taiKhoan.loaiTK == "QL")
+                {
+                    ViewBag.maNV = new SelectList(getNVs(), "maNV", "hoTen");
+                    ViewBag.NV = db.NhanViens.Where(x => x.ChucVu.maPhongBan == taiKhoan.NhanVien.ChucVu.maPhongBan && x.maNV != taiKhoan.maNV).ToList();
+                    luongs = luongs.Where(x => x.NhanVien.ChucVu.maPhongBan == taiKhoan.NhanVien.ChucVu.maPhongBan && x.maNV != taiKhoan.maNV);
+                    return View(luongs.ToList());
+                }
+            }
+            return HttpNotFound();
         }
 
         // GET: Luongs/Details/5
@@ -56,8 +82,8 @@ namespace Web_QLNS_VTH.Controllers
         public ActionResult Create()
         {
             var list = db.NhanViens.ToList();
-            ViewBag.NV = list;
-            ViewBag.maNV = new SelectList(db.NhanViens, "maNV", "maNV");
+            ViewBag.NV = getNVs();
+            ViewBag.maNV = new SelectList(getNVs(), "maNV", "maNV");
             return View();
         }
 
@@ -70,6 +96,7 @@ namespace Web_QLNS_VTH.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (manageController.checkLuong(luong.maNV, luong.thangNam)) { 
                 luong.maLuong = manageController.tuSinhMa(db.Luongs.Max(x => x.maLuong)).ToString();
                 luong.maNV = luong.maNV.ToString();
                 var parts = luong.thangNam.Split('-');
@@ -89,10 +116,11 @@ namespace Web_QLNS_VTH.Controllers
                 //luong.luongNhan = Decimal.Truncate(manageController.luongNhan(luong.maNV, month, year, (int)luong.nghiKhongPhep, (decimal)luong.luongUngTruoc));
                 db.Luongs.Add(luong);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index");}
+                Session["danger"] = manageController.danger;
             }
 
-            ViewBag.maNV = new SelectList(db.NhanViens, "maNV", "hoTen", luong.maNV);
+            ViewBag.maNV = new SelectList(getNVs(), "maNV", "hoTen", luong.maNV);
             return View(luong);
         }
         //public ActionResult Create([Bind(Include = "maLuong,maNV,thangNam,bacLuong,heSoLuong,mucLuong,phuCap,soNgayCong,nghiKhongPhep,luongUngTruoc,luongNhan")] Luong luong)
@@ -154,7 +182,6 @@ namespace Web_QLNS_VTH.Controllers
                             property.SetValue(existing, value);
                         }
                     }
-
                     db.Entry(existing).State = EntityState.Modified;
                     db.SaveChanges();
                     Session["success"] = "Cập nhật nhân viên thành công";

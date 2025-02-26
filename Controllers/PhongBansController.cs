@@ -66,11 +66,14 @@ namespace Web_QLNS_VTH.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (db.PhongBans.FirstOrDefault(x => x.tenPhongBan == phongBan.tenPhongBan) == null)
+                { 
                 ManageController manageController = new ManageController();
                 phongBan.maPhongBan = manageController.tuSinhMa(db.PhongBans.Max(x=>x.maPhongBan));
                 db.PhongBans.Add(phongBan);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index");}
+                Session["danger"] = "Tên phòng ban đã tồn tại";
             }
 
             return View(phongBan);

@@ -220,7 +220,6 @@
     <Content Include="Views\ChucVus\Create.cshtml" />
     <Content Include="Views\ChucVus\Delete.cshtml" />
     <Content Include="Views\ChucVus\Details.cshtml" />
-    <Content Include="Views\ChucVus\Edit.cshtml" />
     <Content Include="Views\ChucVus\Index.cshtml" />
     <Content Include="Views\Luongs\Create.cshtml" />
     <Content Include="Views\Luongs\Delete.cshtml" />
@@ -270,6 +269,7 @@
     <Content Include="Views\Manage\tangCaQT.cshtml" />
     <Content Include="Views\Manage\nghiPhepQT.cshtml" />
     <Content Include="Views\Manage\yeuCauNPQT.cshtml" />
+    <Content Include="Views\Client\doiMK.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -57,6 +57,7 @@ namespace Web_QLNS_VTH.Controllers
         {
             if (ModelState.IsValid)
             {
+                if(db.ChucVus.FirstOrDefault(x=>x.tenChucVu == chucVu.tenChucVu) == null) { 
                 var manageController = new ManageController();
                 var maNV = manageController.tuSinhMa(db.ChucVus.Max(x => x.maChucVu));
                 Debug.WriteLine(maNV.ToString());
@@ -65,8 +66,12 @@ namespace Web_QLNS_VTH.Controllers
                 db.SaveChanges();
                 Session["Msg"] = "Thêm mới phúc";
                 return RedirectToAction("Index");
+                }
+                Session["danger"] = "Tên chức vụ bị trùng!!";
+                ViewBag.maPhongBan = new SelectList(db.PhongBans, "maPhongBan", "tenPhongBan", chucVu.maPhongBan);
+                return View(chucVu);
             }
-
+            Session["danger"] = "Error";
             ViewBag.maPhongBan = new SelectList(db.PhongBans, "maPhongBan", "tenPhongBan", chucVu.maPhongBan);
             return View(chucVu);
         }
@@ -96,9 +101,16 @@ namespace Web_QLNS_VTH.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(chucVu).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (db.ChucVus.FirstOrDefault(x => x.tenChucVu == chucVu.tenChucVu) == null)
+                {
+                    Session["Msg"] = "Thêm mới phúc";
+                    db.Entry(chucVu).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                Session["danger"] = "Tên chức vụ bị trùng!!";
+                ViewBag.maPhongBan = new SelectList(db.PhongBans, "maPhongBan", "tenPhongBan", chucVu.maPhongBan);
+                return View(chucVu);
             }
             ViewBag.maPhongBan = new SelectList(db.PhongBans, "maPhongBan", "tenPhongBan", chucVu.maPhongBan);
             return View(chucVu);
