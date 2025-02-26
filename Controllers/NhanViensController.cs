@@ -117,6 +117,7 @@ namespace Web_QLNS_VTH.Controllers
             return View(nhanVien);
         }
 
+
         // GET: NhanViens/Edit/5
         public ActionResult Edit(string id)
         {
