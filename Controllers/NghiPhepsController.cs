@@ -56,27 +56,7 @@ namespace Web_QLNS_VTH.Controllers
             ViewBag.NVChon = db.NhanViens.Find(id);
             return View(nghiPhep);
         }
-        // GET: NghiPheps/Details/5
-        public ActionResult Details(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            NghiPhep nghiPhep = db.NghiPheps.Find(id);
-            if (nghiPhep == null)
-            {
-                return HttpNotFound();
-            }
-            return View(nghiPhep);
-        }
-
-        // GET: NghiPheps/Create
-        public ActionResult Create()
-        {
-            ViewBag.maNV = new SelectList(getNVs(), "maNV", "hoTen");
-            return View();
-        }
+        // GET: NghiPheps/Details/
 
         // POST: NghiPheps/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
@@ -102,21 +82,6 @@ namespace Web_QLNS_VTH.Controllers
         }
 
         // GET: NghiPheps/Edit/5
-        public ActionResult Edit(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            NghiPhep nghiPhep = db.NghiPheps.Find(id);
-            if (nghiPhep == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.maNV = new SelectList(db.NhanViens, "maNV", "hoTen", nghiPhep.maNV);
-            return View(nghiPhep);
-        }
-
         // POST: NghiPheps/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -135,20 +100,6 @@ namespace Web_QLNS_VTH.Controllers
         }
 
         // GET: NghiPheps/Delete/5
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            NghiPhep nghiPhep = db.NghiPheps.Find(id);
-            if (nghiPhep == null)
-            {
-                return HttpNotFound();
-            }
-            return View(nghiPhep);
-        }
-
         // POST: NghiPheps/Delete/5
         //[HttpPost, ActionName("Delete")]
         //[ValidateAntiForgeryToken]

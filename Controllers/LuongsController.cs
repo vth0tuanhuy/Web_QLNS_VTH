@@ -195,23 +195,9 @@ namespace Web_QLNS_VTH.Controllers
         }
 
         // GET: Luongs/Delete/5
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Luong luong = db.Luongs.Find(id);
-            if (luong == null)
-            {
-                return HttpNotFound();
-            }
-            return View(luong);
-        }
-
         // POST: Luongs/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
             Luong luong = db.Luongs.Find(id);

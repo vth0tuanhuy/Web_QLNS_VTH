@@ -70,27 +70,6 @@ namespace Web_QLNS_VTH.Controllers
             return RedirectToAction("Index");
         }
         // GET: YeuCauNPs/Details/5
-        public ActionResult Details(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            YeuCauNP yeuCauNP = db.YeuCauNPs.Find(id);
-            if (yeuCauNP == null)
-            {
-                return HttpNotFound();
-            }
-            return View(yeuCauNP);
-        }
-
-        // GET: YeuCauNPs/Create
-        public ActionResult Create()
-        {
-            ViewBag.maNV = new SelectList(db.NhanViens, "maNV", "hoTen");
-            return View();
-        }
-
         // POST: YeuCauNPs/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -110,20 +89,6 @@ namespace Web_QLNS_VTH.Controllers
         }
 
         // GET: YeuCauNPs/Edit/5
-        public ActionResult Edit(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            YeuCauNP yeuCauNP = db.YeuCauNPs.Find(id);
-            if (yeuCauNP == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.maNV = new SelectList(db.NhanViens, "maNV", "hoTen", yeuCauNP.maNV);
-            return View(yeuCauNP);
-        }
 
         // POST: YeuCauNPs/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
@@ -142,21 +107,7 @@ namespace Web_QLNS_VTH.Controllers
             return View(yeuCauNP);
         }
 
-        // GET: YeuCauNPs/Delete/5
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            YeuCauNP yeuCauNP = db.YeuCauNPs.Find(id);
-            if (yeuCauNP == null)
-            {
-                return HttpNotFound();
-            }
-            return View(yeuCauNP);
-        }
-
+        // GET: YeuCauNPs/Delete/
         // POST: YeuCauNPs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

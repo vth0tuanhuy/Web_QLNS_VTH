@@ -30,27 +30,7 @@ namespace Web_QLNS_VTH.Controllers
         }
 
         // GET: TaiKhoans/Details/5
-        public ActionResult Details(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            TaiKhoan taiKhoan = db.TaiKhoans.Find(id);
-            if (taiKhoan == null)
-            {
-                return HttpNotFound();
-            }
-            return View(taiKhoan);
-        }
-
-        // GET: TaiKhoans/Create
-        public ActionResult Create()
-        {
-            
-            ViewBag.maNV = new SelectList(db.NhanViens, "maNV", "hoTen");
-            return View();
-        }
+      
 
         // POST: TaiKhoans/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
@@ -74,21 +54,7 @@ namespace Web_QLNS_VTH.Controllers
         }
 
         // GET: TaiKhoans/Edit/5
-        public ActionResult Edit(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            TaiKhoan taiKhoan = db.TaiKhoans.Find(id);
-            if (taiKhoan == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.maNV = new SelectList(db.NhanViens, "maNV", "hoTen", taiKhoan.maNV);
-            return View(taiKhoan);
-        }
-
+       
         // POST: TaiKhoans/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -112,20 +78,7 @@ namespace Web_QLNS_VTH.Controllers
         }
 
         // GET: TaiKhoans/Delete/5
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            TaiKhoan taiKhoan = db.TaiKhoans.Find(id);
-            if (taiKhoan == null)
-            {
-                return HttpNotFound();
-            }
-            return View(taiKhoan);
-        }
-
+    
         // POST: TaiKhoans/Delete/5
 
         public ActionResult DeleteConfirmed(string id)

@@ -51,20 +51,6 @@ namespace Web_QLNS_VTH.Controllers
         }
 
         // GET: NhanViens/Details/5
-        public ActionResult Details(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            NhanVien nhanVien = db.NhanViens.Find(id);
-            if (nhanVien == null)
-            {
-                return HttpNotFound();
-            }
-            return View(nhanVien);
-        }
-
         // GET: NhanViens/Create
         public ActionResult Create()
         {

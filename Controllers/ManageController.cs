@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using Web_QLNS_VTH.Models;
@@ -14,6 +15,46 @@ namespace Web_QLNS_VTH.Controllers
         public string danger = "";
         decimal luongCoSo = 2340000;
         private Model1 db = new Model1();
+        public bool CheckProperties<T>(T obj, string id)
+        {
+            foreach (PropertyInfo property in typeof(T).GetProperties())
+            {
+                // Bỏ qua thuộc tính Id
+                if (property.Name.Equals(id, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue; // Bỏ qua kiểm tra cho thuộc tính Id
+                }
+
+                var value = property.GetValue(obj);
+                Debug.WriteLine($"Property: {property.Name}, Value: {value}");
+                danger = "Vui lòng nhập đầy đủ thông tin, không được để trống!!!";
+                // Kiểm tra nếu giá trị là chuỗi
+                if (value is string strValue)
+                {
+                    // Loại bỏ các dấu cách ở đầu và cuối chuỗi
+                    strValue = strValue.Trim();
+
+                    // Kiểm tra xem chuỗi có rỗng không
+                    if (string.IsNullOrEmpty(strValue))
+                    {
+                        return false; // Có thuộc tính chuỗi rỗng hoặc chỉ chứa dấu cách
+                    }
+                }
+                if (value == null)
+                {
+                    return false; // Có thuộc tính null
+                }
+            }
+            return true; // Tất cả thuộc tính đều khác rỗng và không phải null (trừ Id)
+        }
+        public bool checkMK(string mk)
+        {
+            if(mk.Length < 6) {
+                danger = "Mật khẩu phải từ 6 kí tự trở lên!";
+                return false ;
+            }
+            return true;
+        }
         public ActionResult profile(string id)
         {
             var nv = db.NhanViens.Find(id);
@@ -49,13 +90,16 @@ namespace Web_QLNS_VTH.Controllers
                 if (Session["taikhoan"] != null)
                 {
                     tk = Session["taikhoan"] as TaiKhoan;
+                    if (checkTimePhuHop((DateTime)yeuCauNP.tuNgay,(DateTime)yeuCauNP.denNgay,tk.maNV)) { 
                     yeuCauNP.maNV = tk.maNV;
                     yeuCauNP.maYeuCauNP = x.tuSinhMa(db.YeuCauNPs.Max(m => m.maYeuCauNP));
                     yeuCauNP.tinhTrang = "Chưa duyệt";
                     db.YeuCauNPs.Add(yeuCauNP);
                     db.SaveChanges();
                     var yc = db.YeuCauNPs.Where(n => n.maNV == tk.maNV).ToList();
-                    return View(yc);
+                    return View(yc);}
+                    Session["danger"] = danger;
+                    return RedirectToAction("showYeuCauNP", "Manage", new { id = tk.maNV });
                 }
             }
             return View();
@@ -67,20 +111,21 @@ namespace Web_QLNS_VTH.Controllers
 
             if (tk != null && tk.matKhau == oldMK)
             {
-                // Cập nhật mật khẩu  
-                TaiKhoan tkc = db.TaiKhoans.Find(tk.maTK);
-                db.TaiKhoans.Attach(tkc);
-                tkc.matKhau = newMK;
-                // Lưu các thay đổi vào cơ sở dữ liệu
-                db.Entry(tkc).State = EntityState.Modified;
-                db.SaveChanges();
-
-                // Chuyển hướng đến trang đăng nhập
-                return RedirectToAction("login", "Manage", null);
-            }
-
-            // Nếu không thành công, trả về view hiện tại
-            return RedirectToAction("Index","NhanViens");
+                if(checkMK(newMK))
+                {
+                    // Cập nhật mật khẩu  
+                    TaiKhoan tkc = db.TaiKhoans.Find(tk.maTK);
+                    db.TaiKhoans.Attach(tkc);
+                    tkc.matKhau = newMK;
+                    // Lưu các thay đổi vào cơ sở dữ liệu
+                    db.Entry(tkc).State = EntityState.Modified;
+                    db.SaveChanges();
+                    // Chuyển hướng đến trang đăng nhập
+                    return RedirectToAction("login", "Manage", null);
+                }
+                Session["danger"] = danger;
+            } else Session["danger"] = "Mật khẩu không đúng!";
+            return RedirectToAction("profile","Manage",new {id = tk.maNV});
         }
         // GET: Manage
         public ActionResult login()

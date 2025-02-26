@@ -27,26 +27,6 @@ namespace Web_QLNS_VTH.Controllers
         }
 
         // GET: ChucVus/Details/5
-        public ActionResult Details(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ChucVu chucVu = db.ChucVus.Find(id);
-            if (chucVu == null)
-            {
-                return HttpNotFound();
-            }
-            return View(chucVu);
-        }
-
-        // GET: ChucVus/Create
-        public ActionResult Create()
-        {
-            ViewBag.maPhongBan = new SelectList(db.PhongBans, "maPhongBan", "tenPhongBan");
-            return View();
-        }
 
         // POST: ChucVus/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
@@ -77,21 +57,6 @@ namespace Web_QLNS_VTH.Controllers
         }
 
         // GET: ChucVus/Edit/5
-        public ActionResult Edit(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ChucVu chucVu = db.ChucVus.Find(id);
-            if (chucVu == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.maPhongBan = new SelectList(db.PhongBans, "maPhongBan", "tenPhongBan", chucVu.maPhongBan);
-            return View(chucVu);
-        }
-
         // POST: ChucVus/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -117,20 +82,6 @@ namespace Web_QLNS_VTH.Controllers
         }
 
         // GET: ChucVus/Delete/5
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ChucVu chucVu = db.ChucVus.Find(id);
-            if (chucVu == null)
-            {
-                return HttpNotFound();
-            }
-            return View(chucVu);
-        }
-
         // POST: ChucVus/Delete/5
 
         public ActionResult DeleteConfirmed(string id)

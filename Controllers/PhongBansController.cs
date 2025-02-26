@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using Web_QLNS_VTH.Models;
@@ -14,7 +15,8 @@ namespace Web_QLNS_VTH.Controllers
     public class PhongBansController : Controller
     {
         private Model1 db = new Model1();
-
+        ManageController m = new ManageController();
+        
         // GET: PhongBans
         public ActionResult Index()
         {
@@ -27,35 +29,13 @@ namespace Web_QLNS_VTH.Controllers
                 TenPhong = pb.tenPhongBan,
                 SoLuongNhanVien = pb.ChucVus.SelectMany(cv => cv.NhanViens).Count() // Đếm số lượng nhân viên theo chức vụ
             }).ToList();
-            foreach (var i in phongBans)
-            {
-                Debug.WriteLine(i.ToString());
-            }
+
             List<int> SLNV = new List<int>();
             //return View(phongBans);
             return View(db.PhongBans.ToList());
         }
 
         // GET: PhongBans/Details/5
-        public ActionResult Details(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            PhongBan phongBan = db.PhongBans.Find(id);
-            if (phongBan == null)
-            {
-                return HttpNotFound();
-            }
-            return View(phongBan);
-        }
-
-        // GET: PhongBans/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
 
         // POST: PhongBans/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
@@ -64,8 +44,14 @@ namespace Web_QLNS_VTH.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "tenPhongBan")] PhongBan phongBan)
         {
+            
             if (ModelState.IsValid)
             {
+                if (!m.CheckProperties(phongBan, "maPhongBan"))
+                {
+                    Session["danger"] = m.danger;
+                    return RedirectToAction("Index");
+                }
                 if (db.PhongBans.FirstOrDefault(x => x.tenPhongBan == phongBan.tenPhongBan) == null)
                 { 
                 ManageController manageController = new ManageController();
@@ -74,25 +60,13 @@ namespace Web_QLNS_VTH.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");}
                 Session["danger"] = "Tên phòng ban đã tồn tại";
+                return RedirectToAction("Index");
             }
 
-            return View(phongBan);
+            return View();
         }
 
         // GET: PhongBans/Edit/5
-        public ActionResult Edit(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            PhongBan phongBan = db.PhongBans.Find(id);
-            if (phongBan == null)
-            {
-                return HttpNotFound();
-            }
-            return View(phongBan);
-        }
 
         // POST: PhongBans/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
@@ -107,25 +81,10 @@ namespace Web_QLNS_VTH.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(phongBan);
+            return RedirectToAction("Index");
         }
 
         // GET: PhongBans/Delete/5
-        public ActionResult Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            PhongBan phongBan = db.PhongBans.Find(id);
-            if (phongBan == null)
-            {
-                return HttpNotFound();
-            }
-            return View(phongBan);
-        }
-
-
         public ActionResult DeleteConfirmed(string id)
         {
             PhongBan phongBan = db.PhongBans.Find(id);
